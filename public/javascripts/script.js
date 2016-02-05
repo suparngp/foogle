@@ -1,8 +1,8 @@
 /**
  * Created by suparngupta on 2/4/16.
  */
-
-var app = angular.module('app', ['ui.router', 'ngSanitize']);
+angular.module('infinite-scroll').value('THROTTLE_MILLISECONDS', 100);
+var app = angular.module('app', ['ui.router', 'ngSanitize', 'infinite-scroll']);
 
 app.config(function ($stateProvider, $urlRouterProvider) {
     //
@@ -20,13 +20,6 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             templateUrl: 'partials/search-results.html',
             controller: 'SearchResult'
         });
-    //.state('state1.list', {
-    //    url: "/list",
-    //    templateUrl: "partials/state1.list.html",
-    //    controller: function($scope) {
-    //        $scope.items = ["A", "List", "Of", "Items"];
-    //    }
-    //})
 });
 
 app.controller('Main', function ($scope, network, $state) {
@@ -58,14 +51,22 @@ app.controller('SearchResult', function ($scope, $http, network, $stateParams) {
 
     $scope.reload = function () {
         var query = $stateParams.query;
-        $scope.search = {query: query};
+        $scope.search = {query: query, show: query, results: [], start: 0};
         $scope.results = [];
-        $scope.goToResult(query);
+        $scope.goToResult();
     };
-    $scope.goToResult = function (query) {
-        $http.get('/api/search?query=' + query)
+    $scope.goToResult = function () {
+        if ($scope.search.pending) {
+            return;
+        }
+        var start = $scope.search.start;
+        var query = $scope.search.query;
+        $scope.search.pending = true;
+        $http.get('/api/search?query=' + query + '&start=' + start)
             .then(function (response) {
-                $scope.search.results = response.data;
+                $scope.search.start += 10;
+                $scope.search.results.push(response.data);
+                $scope.search.pending = false;
             })
             .catch(function (error) {
                 console.error(error);
@@ -79,7 +80,47 @@ app.directive('suggestions', function () {
         restrict: 'E',
         templateUrl: 'partials/suggestions.html',
         scope: {
-            "results": "="
+            "results": "=",
+            "search": "="
+        },
+        link: function (scope, elem) {
+            $('body').keydown('input', function (e) {
+                if (!elem.is(":visible") || !scope.results || !scope.results.length || (e.keyCode !== 40 && e.keyCode !== 38)) {
+                    console.log("returning");
+                    return;
+                }
+                scope.$apply(function(scope){
+                    var index = _.findIndex(scope.results, {active:true});
+                    scope.results.map(function(result){
+                        result.active = false;
+                    });
+                    switch(e.keyCode) {
+                        case 40:
+                            e.preventDefault();
+                            if(index >= 0 && index + 1 < scope.results.length){
+                                scope.results[++index].active = true;
+                            }
+                            else {
+                                index = 0;
+                                scope.results[0].active = true;
+                            }
+
+                            scope.search.query = scope.results[index].show.replace(/<[^>]+>/ig,"");
+                            break;
+                        case 38:
+                            e.preventDefault();
+                            if(index >= 0 && index - 1 > -1){
+                                scope.results[--index].active = true;
+                            }
+                            else {
+                                index = scope.results.length - 1;
+                                scope.results[scope.results.length - 1].active = true;
+                            }
+                            scope.search.query = scope.results[index].show.replace(/<[^>]+>/ig,"");
+                            break;
+                    }
+                });
+            });
         }
     }
 });
@@ -118,18 +159,3 @@ app.service('network', function ($q, $http) {
     };
 });
 
-app.directive('foogleResults', function () {
-    return {
-        restrict: 'E',
-        scope: {
-            search: "="
-        },
-        link: function (scope, elem) {
-            //window.html = scope.search.results;
-            var html = $(scope.search.results);
-            html.find('script,noscript,style').remove();
-            console.log(html);
-            //elem.append(html);
-        }
-    }
-});

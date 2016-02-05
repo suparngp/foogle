@@ -1,21 +1,79 @@
-body, html{
-    height:100%;
-}
-body {
-    padding: 50px;
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
 
-body > .container > [ui-view]{
-    height: 100%;
-}
 a {
     color: #00B7FF;
 }
 
-h3{
-    font-size: 20px;
+.r a{
+    font-size: 16px;
 }
 svg{
     display: none;
+}
+
+cite{
+    font-style: normal;
+    color: #4caf50;
+}
+
+.sld h3{
+    margin: 0 0 !important;
+}
+tr.mslg td{
+    padding: 5px 5px;
+}
+
+._cD, .a[href="undefined"]{
+    display: none !important;
+}
+
+h3.r{
+    margin-bottom:0 !important;
+    line-height: 100%;
+}
+
+div.kv{
+    padding-bottom: 5px;
+}
+
+.g table{
+    border-bottom: 1px solid #eeeeee;
+}
+td[valign="top"]{
+    padding: 0 10px;
+    vertical-align: top;
+}
+td[valign="top"] img{
+    margin-top: 5px;
+}
+
+td[valign="top"] > div:last-child{
+    padding-bottom: 20px;
+}
+
+.j{
+    padding: 10px 0;
+}
+
+div:not(.kv)>cite{
+    margin-top: 5px;
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+a.brand-logo img{
+    height: 50px;
+    vertical-align: middle;
+    margin-right: 15px;
+}
+
+nav{
+    background-color: #fafafa;
+}
+
+.input-field input[type="search"], .input-field input[type=search]+label>i, .input-field input[type=search] ~ .material-icons{
+    color: #444;
+}
+
+.collection .collection-item.active{
+    background: #e1f5fe;
 }

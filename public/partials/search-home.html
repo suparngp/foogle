@@ -1,24 +1,27 @@
-<div class="" style="height: 100%;margin-top: 400px;">
-    <div>
-        <h1 class="center-align">
-            ***** google
-        </h1>
-        <div class="row">
-            <form class="col s12" ng-submit="submit(search.query)">
-                <div class="row center-align" style="margin-bottom: -5px;">
-                    <div class="input-field col s6 offset-s3">
-                        <i class="material-icons" style="position: absolute; bottom: 22px; right: 0;">search</i>
-                        <input  autofocus name="search" id="search" style=" left: -20px;" ng-model="search.query"
-                                ng-change="updateQuery(search.query)"
-                                type="text" placeholder="type something to search" class="validate">
+<div class="container" style="height: 100%;" ng-controller="Main">
+    <div class="" style="height: 100%;margin-top: 30%;">
+        <div>
+            <h1 class="center-align">
+                <img src="images/foogle.png" alt="" style="height: 200px;">
+            </h1>
+            <div class="row">
+                <form class="col s12" ng-submit="submit(search.query)">
+                    <div class="row center-align" style="margin-bottom: -5px;">
+                        <div class="input-field col s6 offset-s3">
+                            <i class="material-icons" style="position: absolute; bottom: 22px; right: 0;">search</i>
+                            <input autocomplete="off" autofocus name="search" id="search" style=" left: -20px;" ng-model="search.query"
+                                   ng-change="updateQuery(search.query)"
+                                   type="text" placeholder="type something to search" class="validate">
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col s6 offset-s3">
-                        <suggestions results="results"></suggestions>
+                    <div class="row">
+                        <div class="col s6 offset-s3">
+                            <suggestions search="search" results="results"></suggestions>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+

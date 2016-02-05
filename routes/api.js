@@ -20,11 +20,31 @@ router.get('/complete', function(req, res, next) {
 
 
 router.get('/search', function(req, res, next){
-
-    axios.get('https://www.google.com/search?q=' + req.query.query)
+    var query = req.query.query;
+    if(!query){
+        res.send('<blockquote>  No Results Found</blockquote>');
+        return;
+    }
+    var start = req.query.start;
+    axios.get('https://www.google.com/search?q=' + req.query.query + '&btnG=Search&gbv=1' + '&start=' + start)
         .then(function(response){
-            var results = cheerio.load(response.data)('body').html();
-            res.send(results);
+            var $ = cheerio.load(response.data);
+            var allUrls = [];
+            var anchors = $('a');
+            anchors.attr('href', function(i, url){
+                var urls = url.split(/(\?q=)|(q=related:)|\&/gi)
+                    .filter(function(token){
+                    return token && (token.indexOf('http') === 0 || token.indexOf('www') === 0);
+                }).map(function(url){
+                    return url.trim();
+                });
+                allUrls.push(urls[0]);
+                return urls[0];
+            });
+            anchors.attr('title', function(i, url){
+                return allUrls[i];
+            });
+            res.send($.html('#ires'));
         })
         .catch(function(error){
             console.error(error);
