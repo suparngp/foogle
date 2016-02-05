@@ -1,0 +1,5 @@
+<ul class="collection" ng-show="results && results.length">
+    <li class="collection-item" ui-sref="results({query: r.query})" ng-repeat="r in results">
+        <a href="" ng-bind-html="r.show"></a>
+    </li>
+</ul>

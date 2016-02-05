@@ -12,3 +12,10 @@ body > .container > [ui-view]{
 a {
     color: #00B7FF;
 }
+
+h3{
+    font-size: 20px;
+}
+svg{
+    display: none;
+}

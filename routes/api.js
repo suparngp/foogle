@@ -10,7 +10,6 @@ router.get('/complete', function(req, res, next) {
   var url = "https://www.google.com/complete/search?sclient=psy-ab&site=&source=hp&q=" + q;
   axios.get(url)
       .then(function(response){
-        console.log(response);
         res.send(response.data[1]);
       })
       .catch(function(error){
@@ -21,11 +20,10 @@ router.get('/complete', function(req, res, next) {
 
 
 router.get('/search', function(req, res, next){
-    console.log(req.query);
 
     axios.get('https://www.google.com/search?q=' + req.query.query)
         .then(function(response){
-            var results = cheerio.load(response.data)('#rso').html();
+            var results = cheerio.load(response.data)('body').html();
             res.send(results);
         })
         .catch(function(error){

@@ -1,0 +1,27 @@
+<div>
+    <nav>
+        <div class="nav-wrapper">
+            <form ng-submit="submit(search.query)">
+                <div class="input-field">
+                    <input autofocus id="search" name="search" type="search" ng-model="search.query"
+                           ng-change="updateQuery(search.query)">
+                    <label for="search"><i class="material-icons">search</i></label>
+                    <i class="material-icons">close</i>
+                </div>
+            </form>
+
+        </div>
+    </nav>
+    <div ng-show="results && results.length">
+        <suggestions results="results"></suggestions>
+    </div>
+    <div class="section">
+        <div class="row">
+            <div class="col s12">
+                <div ng-if="search.results">
+                    <foogle-results search="search"></foogle-results>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
