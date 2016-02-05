@@ -44,9 +44,7 @@ router.get('/search', function (req, res, next) {
             anchors.attr('title', function (i, url) {
                 return allUrls[i];
             });
-
-            throw new Error("Deliberate error");
-
+            
             res.send($.html('#ires'));
         })
         .catch(function (response) {
