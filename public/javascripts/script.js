@@ -134,9 +134,14 @@ app.service('network', function ($q, $http) {
                     console.log(response.data);
                     var results = _.uniq(response.data.map(function (arr) {
                         if (arr.length === 4) {
+
+                            var variations = _.values(arr[3]).filter(function(variation){
+                                return !!variation;
+                            });
+                            var show =  (arr[0] + ' - ' + variations.join(', '));
                             return {
-                                query: arr[3].c.replace(/<[^>]+>/gm, ''),
-                                show: arr[0] + ' - ' + arr[3].b
+                                query: (arr[3].c || arr[3].za).replace(/<[^>]+>/gm, ''),
+                                show: show
                             };
                         }
                         else {
