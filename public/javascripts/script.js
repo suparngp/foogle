@@ -69,6 +69,7 @@ app.controller('SearchResult', function ($scope, $http, network, $stateParams) {
                 $scope.search.pending = false;
             })
             .catch(function (error) {
+                $scope.search.results.push('<div class="mdi-alert-error">Oops!\n' + error.data + '</div>');
                 console.error(error);
             });
     };
@@ -89,15 +90,15 @@ app.directive('suggestions', function () {
                     console.log("returning");
                     return;
                 }
-                scope.$apply(function(scope){
-                    var index = _.findIndex(scope.results, {active:true});
-                    scope.results.map(function(result){
+                scope.$apply(function (scope) {
+                    var index = _.findIndex(scope.results, {active: true});
+                    scope.results.map(function (result) {
                         result.active = false;
                     });
-                    switch(e.keyCode) {
+                    switch (e.keyCode) {
                         case 40:
                             e.preventDefault();
-                            if(index >= 0 && index + 1 < scope.results.length){
+                            if (index >= 0 && index + 1 < scope.results.length) {
                                 scope.results[++index].active = true;
                             }
                             else {
@@ -105,18 +106,18 @@ app.directive('suggestions', function () {
                                 scope.results[0].active = true;
                             }
 
-                            scope.search.query = scope.results[index].show.replace(/<[^>]+>/ig,"");
+                            scope.search.query = scope.results[index].show.replace(/<[^>]+>/ig, "");
                             break;
                         case 38:
                             e.preventDefault();
-                            if(index >= 0 && index - 1 > -1){
+                            if (index >= 0 && index - 1 > -1) {
                                 scope.results[--index].active = true;
                             }
                             else {
                                 index = scope.results.length - 1;
                                 scope.results[scope.results.length - 1].active = true;
                             }
-                            scope.search.query = scope.results[index].show.replace(/<[^>]+>/ig,"");
+                            scope.search.query = scope.results[index].show.replace(/<[^>]+>/ig, "");
                             break;
                     }
                 });
